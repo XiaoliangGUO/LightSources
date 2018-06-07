@@ -1,0 +1,117 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Thu Jun  7 11:57:31 2018
+
+@author: Guo Xiaoliang
+"""
+
+from raytracer import *
+import numbers
+# =============================================================================
+
+class ParallelSource(LightSource):
+    def __init__(self, direction, color, faraway=0.99e39):
+        self.direction = direction.norm()
+        self.color = rgb(*[color]*3) if isinstance(color, numbers.Number) else color
+        self.faraway = faraway
+        
+    def get_direction(self, M):
+        return self.direction
+
+    def get_distance(self,M):
+        return self.faraway
+
+    def get_color(self, M):
+        return self.color
+    
+    @classmethod
+    def keys(cls):
+        return ['direction', 'color']
+
+    @classmethod
+    def kw(cls):
+        return ['faraway']
+
+# =============================================================================
+
+class ConeSource(LightSource):
+    
+    def __init__(self,P,V,alpha,color, E_inf = True):
+        self.P = P
+        self.V = V
+        self.alpha = np.radians(alpha)
+        self.color = rgb(*[color]*3) if isinstance(color, numbers.Number) else color
+        self.E_inf = E_inf
+        # E_inf = True veut dire qu'on est à énergie infinie
+    
+    # Version originale
+    # pour avoir PM, plutôt M-P ?
+    def get_direction(self, M):
+        return (self.P - M).norm()
+
+    def get_distance(self,M):
+        return abs(self.P - M)
+
+    def get_color(self, M):
+        num = self.V.dot(M)
+        den = self.get_distance(M)
+        for (V_M, PM) in zip(num, den):
+            if np.sin(self.alpha) >= V_M/PM:
+                if self.E_inf:
+                    return self.color
+                else:
+                    return self.color/PM
+            else:
+                self.color = rgb(0,0,0)
+                return self.color
+   
+#    # M-P, on obtient vecteur PM
+#    def get_direction(self, M):
+#        return (M - self.P).norm()
+#
+#    def get_distance(self,M):
+#        return abs(M - self.P)
+#
+#    def get_color(self, M):
+#        w = self.get_direction(M)
+#        cos_beta = self.V.dot(w)
+#        beta = np.arccos(cos_beta)
+#        
+#        for b in beta:
+#            if self.alpha >= b:
+#                return self.color
+#            else:
+#                self.color = rgb(0,0,0)
+#                return self.color
+
+# =============================================================================
+# Code de test
+# =============================================================================
+# Pour la source parallele
+#D = vec3(0,1,0)
+#scene = Scene('parallel_source', 0, 1)
+#scene.append(ParallelSource(D, 1))
+#
+#scene.append(CheckeredPlane(vec3(0,-0.5,0),vec3(0,1,0),diffuse = [rgb(0.1,0.1,0.1),rgb(0.9,0.9,0.9)], ambient = 0.1))
+#scene.append(Sphere(vec3(0,0.2,0), 0.25, diffuse=rgb(0.99,0.51,0), mirror=0, specular=0))
+#
+#scene.initialize().trace().save_image()
+
+# ========================
+# Pour la source cône
+couleur = rgb(1,1,1)
+V = vec3(0,-1,0)
+P = vec3(0,1,0)
+M = vec3(0,0,0)
+
+scene = Scene('cone_source', 0.1, 1)
+scene.append(ConeSource(P,V,30,couleur,E_inf = False))
+#scene.append(LightSource(P,couleur))
+
+scene.append(CheckeredPlane(vec3(0,-0.5,0),vec3(0,1,0),diffuse = [rgb(0.1,0.1,0.1),rgb(0.9,0.9,0.9)], ambient = 0))
+scene.append(Sphere(vec3(0,-0.25,0), 0.25, diffuse=rgb(0.99,0.51,0), mirror=0, specular=0))
+
+scene.initialize().trace().save_image()
+
+
+

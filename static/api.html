@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Sources d'éclairage</title>
+        <meta charset="utf-8">
+        <link rel="stylesheet" href="../assets/api.css">
+    </head>
+    <body>
+        <h1>Bienvenue sur la page sources d'éclairage</h1>
+        <div id="parametres">
+            
+      <form>  
+        <ul id="menu-accordeon">
+            <li><a href="#">Choix de la scène</a>
+            <ul>
+                <li><a href="#">Scène 1</a></li>
+                <li><a href="#">Scène 2</a></li>
+                <li><a href="#">Scène 3</a></li>
+                </ul>
+            </li>
+        </ul>
+        <br>
+        <ul id="menu-accordeon">
+            <li><a href="#">Choix de la source de lumière</a>
+            <ul>
+                <li><a href="#">Source située à l'infini</a></li>
+                <li><a href="#">Source conique</a></li>
+                <li><a href="#">Source conique à énergie finie</a></li>
+                </ul>
+            </li>
+        </ul>
+        <br>  
+          
+          <fieldset>
+              <legend><B> Choix de la position </B></legend>
+    Position x:    
+   <input type="number" name ="position x">
+        <br>
+    Position y:    
+   <input type="number" name ="position y">
+        <br>
+    Position z:    
+   <input type="number" name ="position z">
+        <br>
+          </fieldset>
+          
+          <br>
+          <fieldset>
+              <legend><B> Choix de la couleur </B></legend>
+             Rouge
+              <input id="red" type="range" min="0" max="255">
+              <br>
+             Bleu
+              <input id="blue" type="range" min="0" max="255">
+              <br>
+             Vert
+              <input id="green" type="range" min="0" max="255">
+              <br>
+           </fieldset>
+          <br>
+          <fieldset>
+              <legend><B> Choix de l'intensité </B></legend> 
+              <br>
+              Intensité
+              <input id="intensity" type="range" min="0" max="1" step="0.1">
+              <br>
+          </fieldset>
+          <br>
+          <fieldset>
+              <legend><B> Choix de l'orientation </B></legend>
+              Définir le vecteur (x,y,z) déterminant l'orientation.
+              <br>
+              x:    
+              <input type="number" name ="position x">
+              <br>
+              y:    
+              <input type="number" name ="position y">
+              <br>
+              z:   
+              <input type="number" name ="position z">
+              <br>
+          </fieldset>
+          <br>
+          <fieldset>
+              <legend><B> Choix de l'ouverture </B></legend>
+              Définir l'angle d'ouverture alpha. 
+              <br>
+              Alpha <input type="number" name ="angle">
+              <br>
+          </fieldset>
+  
+          
+          
+        </form>
+        </div>
+        
+        <div id="scene">
+        
+        <h2> Scène </h2>
+        <img src = "parallel_source.png" width = 600 height = 450>
+            
+        </div>
+    </body> 
+</html>
+

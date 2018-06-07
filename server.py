@@ -53,15 +53,47 @@ class RequestHandler(http.server.SimpleHTTPRequestHandler):
 
         # SERVICES
         if self.catch_url("/service", self.route):
-            self.send_json({
-                "file" : "strange"
-            })
+            # renvoie la liste des scenes
+            if self.catch_url("/service/scenes", self.route):
+                self.send_json({
+                    "dataType" : "liste des scenes (id, name)"
+                })
+            
+            # renvoie la liste des images
+            elif self.catch_url("/service/images", self.route):
+                self.send_json({
+                    "dataType" : "liste des images (url, name)"
+                })
+            
+            # renvoie les informations relatives à une scene
+            # identifiée par son nom ou son identifiant
+            elif self.catch_url("/service/scene/*", self.route):
+                self.send_json({
+                    "dataType" : "une scene"
+                })
+            
+            # renvoie une erreur : adresse introuvable
+            # (la méthode n'existe pas)
+            elif self.catch_url("/service/*"):
+                self.send_error(404)
+            
+            # renvoie une erreur : syntaxe incompréhensible 
+            # par le serveur (l'adresse est exactement /service)
+            else:
+                self.send_error(400)
     
         # FICHIERS STATIQUES
         elif self.catch_url(self.assets_dir, self.route):
             self.send_asset()
+
         elif self.catch_url("/home", self.route):
             self.send_html_file("/home.html")
+        
+        elif self.catch_url("/api", self.route):
+            self.send_html_file("/api.html")
+        
+        elif self.catch_url("/credits", self.route):
+            self.send_html_file("/credits.html")
 
         # REDIRECTION VERS LA PAGE D'ACCUEIL
         elif self.catch_url("/", self.route):
